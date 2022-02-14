@@ -17,9 +17,9 @@ export const HeaderInnerContainer = styled.div`
 `;
 
 export const Logo = styled.h1`
+  font-family: "Poppins";
   font-size: 1.5rem;
   color: #fff;
-  letter-spacing: 2px;
   text-transform: uppercase;
 `;
 
