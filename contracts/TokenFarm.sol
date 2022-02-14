@@ -42,4 +42,20 @@ contract TokenFarm is Ownable {
         isStaking[msg.sender] = true;
         hasStaked[msg.sender] = true;
     }
+
+    function unstakeTokens( uint256 _amount ) public {
+        require(stakingBalance[msg.sender] > 0, "Staking balance is can't be zero");
+        require(_amount > 0, "Amount can't be zero");
+        require(stakingBalance[msg.sender] >= _amount, "Can't unstake more than Staking balance");
+
+        uint balance = stakingBalance[msg.sender];
+
+        stakeToken.transfer(msg.sender, _amount);
+
+        stakingBalance[msg.sender] -= _amount;
+        
+        if (stakingBalance[msg.sender] == 0) {
+            isStaking[msg.sender] = false;
+        }
+    }
 }
