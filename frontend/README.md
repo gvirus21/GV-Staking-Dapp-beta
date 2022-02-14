@@ -68,3 +68,27 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+// rough-note
+
+staking
+addr1 -> 100gvt -> admin's pool
+
+
+
+increment
+
+ -- 1% intrest on deposited amount every 5 min --
+
+
+
+ unstaking all 
+
+ admin's pool --> addr1
+
+
+unstaking some amount
+
+ admin's pool -- requested amount + all rewards --> addr1

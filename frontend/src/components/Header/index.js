@@ -9,18 +9,39 @@ import {
 } from "./HeaderStyledElements";
 
 const Header = ({ isConnected, setIsConnected }) => {
+  const [defaultAccont, setDefaultAccount] = useState(null);
+  const [userBalance, setUserBalance] = useState(null);
+
   const connect = async () => {
     if (typeof window.ethereum !== "undefined") {
-      // need to work on connect feature
       try {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        setIsConnected(true);
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        if (accounts) {
+          accountChangeHandler(accounts[0]);
+          setIsConnected(true);
+        }
+        
       } catch (err) {
         console.error(err);
       }
     } else {
-      console.log("no ethe found :( ");
+      alert("Wallet not found");
     }
+  };
+
+  const accountChangeHandler = (newAccount) => {
+    console.log(newAccount)
+    getUserBalance(newAccount);
+    setIsConnected(true);
+  };
+
+  const getUserBalance = async (address) => {
+    const balance = await window.ethereum.request({ method: "eth_getBalance", params: [address, ] });
+    setUserBalance(balance);
+    console.log("user balance: ", userBalance)
   };
 
   useEffect(() => {}, []);
