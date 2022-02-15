@@ -12,17 +12,24 @@ import {
   DashboardLabel,
   DashboardValue,
 } from "./HeroStyledElements";
-const HeroSection = ({ isConnected }) => {
+const HeroSection = ({
+  isConnected,
+  stakeAmount,
+  setStakeAmount,
+  setUnstakeAmount,
+}) => {
   const [warningLabelText, setWarningLabelText] = useState("");
-  const [stakeValue, setStakeValue] = useState();
-  const [unstakeValue, setUnstakeValue] = useState();
+  const [stakeInputValue, setStakeInputValue] = useState();
+  const [unstakeInputValue, setUnstakeInputValue] = useState();
 
   function stake() {
-    console.log("stake amount: ", stakeValue);
+    console.log("stake amount: ", stakeInputValue);
+    setStakeAmount(stakeAmount + stakeInputValue);
   }
 
   function unstake() {
-    console.log("unstake amount: ", unstakeValue);
+    console.log("unstake amount: ", unstakeInputValue);
+    setUnstakeAmount(unstakeInputValue)
   }
 
   return (
@@ -57,16 +64,16 @@ const HeroSection = ({ isConnected }) => {
                   placeholder="Enter Stake amount in GVT"
                   type="number"
                   min="0"
-                  value={stakeValue}
+                  value={stakeInputValue}
                   onChange={(e) => {
-                    setStakeValue(e.target.value);
+                    setStakeInputValue(e.target.value);
                   }}
                 />
                 <FormButton
                   onClick={(e) => {
                     e.preventDefault();
                     stake(e);
-                    setStakeValue(0);
+                    setStakeInputValue(0);
                   }}
                 >
                   Stake
@@ -78,16 +85,16 @@ const HeroSection = ({ isConnected }) => {
                   placeholder="Enter Unstake amount in GVT"
                   type="number"
                   min="0"
-                  value={unstakeValue}
+                  value={unstakeInputValue}
                   onChange={(e) => {
-                    setUnstakeValue(e.target.value);
+                    setUnstakeInputValue(e.target.value);
                   }}
                 />
                 <FormButton
                   onClick={(e) => {
                     e.preventDefault();
                     unstake();
-                    setUnstakeValue(0);
+                    setUnstakeInputValue(0);
                   }}
                 >
                   Unstake
