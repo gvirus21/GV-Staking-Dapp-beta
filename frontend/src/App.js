@@ -15,6 +15,7 @@ const App = () => {
 
   useEffect(() => {
     handleConnect();
+    fetchStakedAmount()
   }, []);
 
   useEffect(() => { 
@@ -44,17 +45,24 @@ const App = () => {
   };
 
   // will fetch stake info for the current user
-  const fetchAmountStaked = () => {
+  const fetchStakedAmount = () => {
     // gets the already staked amount from contract
     if (window.ethereum) {
+
+      // get staked amount of user from contract and update stakeAmount
     }
   };
 
   // these functions will run when we change the stake and unstake amount
   // they are going to call / update stake and unstake amount in smart contract
-  const updateStake = () => {};
+  const updateStake = () => {
+    console.log(stakeAmount)
+  };
 
-  const updateUnstake = () => {};
+  const updateUnstake = () => {
+    console.log(unstakeAmount);
+
+  };
 
   return (
     <div className="App">

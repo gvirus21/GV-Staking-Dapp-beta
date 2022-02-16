@@ -11,6 +11,8 @@ import {
   DashboardInnerContainer,
   DashboardLabel,
   DashboardValue,
+  DurationSelector,
+  DurationOption,
 } from "./HeroStyledElements";
 const HeroSection = ({
   isConnected,
@@ -19,8 +21,8 @@ const HeroSection = ({
   setUnstakeAmount,
 }) => {
   const [warningLabelText, setWarningLabelText] = useState("");
-  const [stakeInputValue, setStakeInputValue] = useState();
-  const [unstakeInputValue, setUnstakeInputValue] = useState();
+  const [stakeInputValue, setStakeInputValue] = useState(0);
+  const [unstakeInputValue, setUnstakeInputValue] = useState(0);
 
   function stake() {
     console.log("stake amount: ", stakeInputValue);
@@ -29,7 +31,7 @@ const HeroSection = ({
 
   function unstake() {
     console.log("unstake amount: ", unstakeInputValue);
-    setUnstakeAmount(unstakeInputValue)
+    setUnstakeAmount(unstakeInputValue);
   }
 
   return (
@@ -69,6 +71,11 @@ const HeroSection = ({
                     setStakeInputValue(e.target.value);
                   }}
                 />
+                <DurationSelector>
+                  <DurationOption>3</DurationOption>
+                  <DurationOption>7</DurationOption>
+                  <DurationOption>14</DurationOption>
+                </DurationSelector>
                 <FormButton
                   onClick={(e) => {
                     e.preventDefault();

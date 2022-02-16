@@ -9,8 +9,9 @@ import {
 } from "./HeaderStyledElements";
 
 const Header = ({ isConnected, setIsConnected }) => {
-  const [defaultAccont, setDefaultAccount] = useState(null);
+  const [account, setAccount] = useState("");
   const [userBalance, setUserBalance] = useState(null);
+  const addressText = "";
 
   const connect = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -21,9 +22,10 @@ const Header = ({ isConnected, setIsConnected }) => {
 
         if (accounts) {
           accountChangeHandler(accounts[0]);
+          setAccount(account[0]);
+          console.log(account[0]);
           setIsConnected(true);
         }
-        
       } catch (err) {
         console.error(err);
       }
@@ -33,18 +35,23 @@ const Header = ({ isConnected, setIsConnected }) => {
   };
 
   const accountChangeHandler = (newAccount) => {
-    console.log(newAccount)
+    console.log(newAccount);
     getUserBalance(newAccount);
     setIsConnected(true);
   };
 
   const getUserBalance = async (address) => {
-    const balance = await window.ethereum.request({ method: "eth_getBalance", params: [address, ] });
+    const balance = await window.ethereum.request({
+      method: "eth_getBalance",
+      params: [address],
+    });
     setUserBalance(balance);
-    console.log("user balance: ", userBalance)
+    console.log("user balance: ", userBalance);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(account);
+  }, []);
   return (
     <>
       <HeaderMainContainer>
@@ -52,7 +59,7 @@ const Header = ({ isConnected, setIsConnected }) => {
           <Logo>Gv Staking Dapp</Logo>
 
           {isConnected ? (
-            <ConnectedLabel> 🟢 Connected</ConnectedLabel>
+            <ConnectedLabel> 🟢 Connected </ConnectedLabel>
           ) : (
             <ConnectButton onClick={() => connect()}>Connect</ConnectButton>
           )}

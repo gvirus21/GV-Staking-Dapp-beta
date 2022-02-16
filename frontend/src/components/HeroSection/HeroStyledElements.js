@@ -3,9 +3,8 @@ import styled from "styled-components";
 export const HeroSectionMainContainer = styled.div`
   width: 80%;
   max-width: 50rem;
-  height: 50rem;
   margin: 0 auto;
-  padding: 5rem 0;
+  padding: 2rem 0;
 
   display: flex;
   flex-direction: column;
@@ -20,15 +19,15 @@ export const FormHeading = styled.h1`
 
 export const DashboardContainer = styled.div`
   height: 20rem;
-  width: 80%;
+  padding: 1rem 4rem;
   max-width: 50rem;
   margin: 2rem 0;
-  /* background-color: #fff; */
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 20px;
+  background: linear-gradient(45deg, #1a1a40, #270082);
 `;
 
 export const DashboardInnerContainer = styled.div`
@@ -41,43 +40,62 @@ export const DashboardInnerContainer = styled.div`
 export const DashboardLabel = styled.h1`
   font-weight: 500;
   font-size: 1.5rem;
-  color: #fff;
+  color: #faeee7;
   text-align: center;
 `;
 
 export const DashboardValue = styled.h1`
   font-weight: 500;
   font-size: 1.5rem;
-  color: #2666cf;
+  color: #faeee7;
   text-align: center;
 `;
 
 export const StakingForm = styled.form`
-  margin: 5rem 0;
-  height: 8rem;
+  margin: 1rem 0;
+  padding: 1rem 4rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  border-radius: 20px;
+  max-width: 50rem;
+
+  background: linear-gradient(45deg, #041562, #11468f);
 `;
 
 export const InputContainer = styled.div`
-  width: 27rem;
+  width: 30rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 1rem 0;
 `;
 
 export const FormInput = styled.input`
   font-size: 1.2rem;
-  width: 20rem;
+  height: 3rem;
+  width: 15rem;
+  text-align: right;
   outline: none;
   border: none;
   border-radius: 10px;
   padding: 0.1rem 0.8rem;
+  margin: 1rem 0;
 `;
 
+export const DurationSelector = styled.select`
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+`;
+
+export const DurationOption = styled.option``;
+
 export const FormButton = styled.button`
+  margin: 1rem 0;
   width: 5rem;
   height: 3rem;
   font-size: 1rem;
