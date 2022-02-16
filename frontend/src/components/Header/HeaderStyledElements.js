@@ -40,7 +40,18 @@ export const ConnectButton = styled.button`
   }
 `;
 
+export const AddressLabel = styled.div`
+  height: 2rem;
+  width: 5rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 10px;
+  background-color: #270082;
+`;
+
 export const ConnectedLabel = styled.p`
   font-size: 1rem;
   color: #fff;
+  /* height: 2rem; */
+  max-width: 2rem;
+  overflow: hidden
 `;

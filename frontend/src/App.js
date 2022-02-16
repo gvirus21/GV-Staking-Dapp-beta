@@ -3,9 +3,9 @@ import HeroSection from "./components/HeroSection";
 import React, { useState, useEffect } from "react";
 import StakeTokenAbi from "./artifacts/StakeToken.json";
 
- const StakeTokenAddress = "";
- const gvTokenAddress = "";
- const tokenFarmAddress = "";
+const StakeTokenAddress = "";
+const gvTokenAddress = "";
+const tokenFarmAddress = "";
 
 const App = () => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -15,18 +15,17 @@ const App = () => {
 
   useEffect(() => {
     handleConnect();
-    fetchStakedAmount()
+    fetchStakedAmount();
   }, []);
 
-  useEffect(() => { 
+  useEffect(() => {
     updateStake();
   }, [stakeAmount]);
 
   useEffect(() => {
     updateUnstake();
-   }, [unstakeAmount]);
+  }, [unstakeAmount]);
 
-  
   const handleConnect = async () => {
     if (window.ethereum) {
       try {
@@ -48,7 +47,6 @@ const App = () => {
   const fetchStakedAmount = () => {
     // gets the already staked amount from contract
     if (window.ethereum) {
-
       // get staked amount of user from contract and update stakeAmount
     }
   };
@@ -56,12 +54,11 @@ const App = () => {
   // these functions will run when we change the stake and unstake amount
   // they are going to call / update stake and unstake amount in smart contract
   const updateStake = () => {
-    console.log(stakeAmount)
+    console.log(stakeAmount);
   };
 
   const updateUnstake = () => {
     console.log(unstakeAmount);
-
   };
 
   return (

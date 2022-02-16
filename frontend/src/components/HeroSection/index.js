@@ -22,15 +22,15 @@ const HeroSection = ({
 }) => {
   const [warningLabelText, setWarningLabelText] = useState("");
   const [stakeInputValue, setStakeInputValue] = useState(0);
+  const [stakingDuration, setStakingDuration] = useState(3);
   const [unstakeInputValue, setUnstakeInputValue] = useState(0);
 
   function stake() {
-    console.log("stake amount: ", stakeInputValue);
-    setStakeAmount(stakeAmount + stakeInputValue);
+    // adding old stake value(if there is any) + new input stake value
+    setStakeAmount(Number(stakeAmount) + Number(stakeInputValue));
   }
 
   function unstake() {
-    console.log("unstake amount: ", unstakeInputValue);
     setUnstakeAmount(unstakeInputValue);
   }
 
@@ -51,12 +51,12 @@ const HeroSection = ({
                 <DashboardValue>5000</DashboardValue>
               </DashboardInnerContainer>
               <DashboardInnerContainer>
-                <DashboardLabel>Minutes left: </DashboardLabel>
+                <DashboardLabel>Days left: </DashboardLabel>
                 <DashboardValue>1</DashboardValue>
               </DashboardInnerContainer>
               <DashboardInnerContainer>
                 <DashboardLabel>Your reward</DashboardLabel>
-                <DashboardValue>5100</DashboardValue>
+                <DashboardValue>500</DashboardValue>
               </DashboardInnerContainer>
             </DashboardContainer>
             <StakingForm>
@@ -71,7 +71,11 @@ const HeroSection = ({
                     setStakeInputValue(e.target.value);
                   }}
                 />
-                <DurationSelector>
+                <DurationSelector
+                  onChange={(e) => {
+                    setStakingDuration(e.target.value);
+                  }}
+                >
                   <DurationOption>3</DurationOption>
                   <DurationOption>7</DurationOption>
                   <DurationOption>14</DurationOption>
@@ -91,7 +95,7 @@ const HeroSection = ({
                   id="unstakeInput"
                   placeholder="Enter Unstake amount in GVT"
                   type="number"
-                  min="0"
+                  min="10"
                   value={unstakeInputValue}
                   onChange={(e) => {
                     setUnstakeInputValue(e.target.value);

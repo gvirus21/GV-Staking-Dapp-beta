@@ -6,12 +6,13 @@ import {
   ConnectedLabel,
   HeaderInnerContainer,
   Logo,
+  AddressLabel,
 } from "./HeaderStyledElements";
 
 const Header = ({ isConnected, setIsConnected }) => {
   const [account, setAccount] = useState("");
   const [userBalance, setUserBalance] = useState(null);
-  const addressText = "";
+  const accountAddress = "0x99993995jjtjej3r3";
 
   const connect = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -59,7 +60,9 @@ const Header = ({ isConnected, setIsConnected }) => {
           <Logo>Gv Staking Dapp</Logo>
 
           {isConnected ? (
-            <ConnectedLabel> 🟢 Connected </ConnectedLabel>
+            <AddressLabel>
+              <ConnectedLabel>{accountAddress}</ConnectedLabel>
+            </AddressLabel>
           ) : (
             <ConnectButton onClick={() => connect()}>Connect</ConnectButton>
           )}
