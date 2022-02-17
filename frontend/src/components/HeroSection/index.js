@@ -13,6 +13,8 @@ import {
   DashboardValue,
   DurationSelector,
   DurationOption,
+  DurationContainer,
+  DurationLabel,
 } from "./HeroStyledElements";
 const HeroSection = ({
   isConnected,
@@ -72,7 +74,8 @@ const HeroSection = ({
                     setStakeInputValue(e.target.value);
                   }}
                 />
-                <DurationSelector
+                <DurationContainer>
+                   <DurationSelector
                   onChange={(e) => {
                     setStakingDuration(e.target.value);
                   }}
@@ -80,7 +83,10 @@ const HeroSection = ({
                   <DurationOption>3</DurationOption>
                   <DurationOption>7</DurationOption>
                   <DurationOption>14</DurationOption>
-                </DurationSelector>
+                  </DurationSelector>
+                  <DurationLabel>Days</DurationLabel>
+                </DurationContainer>
+               
                 <FormButton
                   onClick={(e) => {
                     e.preventDefault();

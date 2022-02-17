@@ -85,14 +85,24 @@ export const FormInput = styled.input`
 `;
 
 export const DurationSelector = styled.select`
-  margin: 1rem 0;
-  padding: 0.5rem 1rem;
+  margin: 1rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   border: none;
   outline: none;
   border-radius: 10px;
 `;
 
 export const DurationOption = styled.option``;
+
+export const DurationContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const DurationLabel = styled.p`
+  color: #fff;
+`;
 
 export const FormButton = styled.button`
   margin: 1rem 0;
