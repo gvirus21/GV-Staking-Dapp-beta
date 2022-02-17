@@ -19,10 +19,11 @@ const HeroSection = ({
   stakeAmount,
   setStakeAmount,
   setUnstakeAmount,
+  setStakingDuration,
 }) => {
   const [warningLabelText, setWarningLabelText] = useState("");
   const [stakeInputValue, setStakeInputValue] = useState(0);
-  const [stakingDuration, setStakingDuration] = useState(3);
+  // const [stakingDuration, setStakingDuration] = useState(3);
   const [unstakeInputValue, setUnstakeInputValue] = useState(0);
 
   function stake() {

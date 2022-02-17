@@ -11,6 +11,7 @@ const App = () => {
   const [connectedAccount, setConnectedAccount] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [stakeAmount, setStakeAmount] = useState(0);
+  const [stakingDuration, setStakingDuration] = useState(3);
   const [unstakeAmount, setUnstakeAmount] = useState(0);
 
   useEffect(() => {
@@ -54,7 +55,8 @@ const App = () => {
   // these functions will run when we change the stake and unstake amount
   // they are going to call / update stake and unstake amount in smart contract
   const updateStake = () => {
-    console.log(stakeAmount);
+    console.log("stakeAmount: ", stakeAmount);
+    console.log("stakeDuration: ", stakingDuration);
   };
 
   const updateUnstake = () => {
@@ -69,6 +71,7 @@ const App = () => {
         stakeAmount={stakeAmount}
         setStakeAmount={setStakeAmount}
         setUnstakeAmount={setUnstakeAmount}
+        setStakingDuration={setStakingDuration}
       />
     </div>
   );
