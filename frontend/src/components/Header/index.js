@@ -10,9 +10,17 @@ import {
 } from "./HeaderStyledElements";
 
 const Header = ({ isConnected, setIsConnected }) => {
-  const [account, setAccount] = useState("");
+  const [accountAddress, setAccountAddress] = useState("0x86798");
   const [userBalance, setUserBalance] = useState(null);
-  const accountAddress = "0x99993995jjtjej3r3";
+
+  function truncate(accountAddress) {
+    if (accountAddress.length > 5) {
+      return accountAddress.substring(0, 5) + "...";
+    }
+    return accountAddress;
+  }
+
+  const trimmedAddress = truncate(accountAddress);
 
   const connect = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -23,8 +31,8 @@ const Header = ({ isConnected, setIsConnected }) => {
 
         if (accounts) {
           accountChangeHandler(accounts[0]);
-          setAccount(account[0]);
-          console.log(account[0]);
+          setAccountAddress(accountAddress[0]);
+          console.log(accountAddress[0]);
           setIsConnected(true);
         }
       } catch (err) {
@@ -51,17 +59,17 @@ const Header = ({ isConnected, setIsConnected }) => {
   };
 
   useEffect(() => {
-    console.log(account);
+    console.log(accountAddress);
   }, []);
   return (
     <>
       <HeaderMainContainer>
         <HeaderInnerContainer>
-          <Logo>Gv Staking Dapp</Logo>
+          <Logo>Gv Stake</Logo>
 
           {isConnected ? (
             <AddressLabel>
-              <ConnectedLabel>{accountAddress}</ConnectedLabel>
+              <ConnectedLabel>{trimmedAddress}</ConnectedLabel>
             </AddressLabel>
           ) : (
             <ConnectButton onClick={() => connect()}>Connect</ConnectButton>
