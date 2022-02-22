@@ -8,12 +8,13 @@ const gvTokenAddress = "";
 const tokenFarmAddress = "";
 
 const App = () => {
-  const [staking, setStaking] = useState(false);
   const [connectedAccount, setConnectedAccount] = useState("0xDefault");
-  const [isConnected, setIsConnected] = useState(false);
   const [stakeAmount, setStakeAmount] = useState(0);
-  const [stakingDuration, setStakingDuration] = useState(3);
   const [unstakeAmount, setUnstakeAmount] = useState(0);
+  const [daysLeft, setDaysLeft] = useState(7);
+  const [stakingDuration, setStakingDuration] = useState(3);
+  const [staking, setStaking] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {   
     fetchStakedAmount();
@@ -36,24 +37,6 @@ const App = () => {
     updateUnstake();
   }, [unstakeAmount]);
 
-  // const handleAutoConnect = async () => { }
-
-  // const handleConnect = async () => {
-  //   if (window.ethereum) {
-  //     try {
-  //       const accounts = await window.ethereum.request({
-  //         method: "eth_requestAccounts",
-  //       });
-
-  //       if (accounts) {
-  //         setIsConnected(true);
-  //         setConnectedAccount(accounts[0]);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }
-  // };
 
   // will fetch stake info for the current user
   const fetchStakedAmount = () => {
@@ -91,6 +74,7 @@ const App = () => {
         isConnected={isConnected}
         stakeAmount={stakeAmount}
         setStakeAmount={setStakeAmount}
+        daysLeft={daysLeft}
         setUnstakeAmount={setUnstakeAmount}
         setStakingDuration={setStakingDuration}
       />

@@ -15,6 +15,7 @@ import {
   DurationOption,
   DurationContainer,
   DurationLabel,
+  PlaceHolderDiv,
 } from "./HeroStyledElements";
 const HeroSection = ({
   staking,
@@ -24,13 +25,18 @@ const HeroSection = ({
   setStakeAmount,
   setUnstakeAmount,
   setStakingDuration,
+  daysLeft,
 }) => {
-  const [warningLabelText, setWarningLabelText] = useState("");
+  const [dashboardTitle, setDashboardTilte] = useState(
+    "You haven't staked anything yet!"
+  );
   const [stakeInputValue, setStakeInputValue] = useState(0);
   const [unstakeInputValue, setUnstakeInputValue] = useState(0);
 
   useEffect(() => {
-    console.log("fff")
+    if (staking) {
+      setDashboardTilte("Your Dashboard");
+    }
   }, [staking]);
   function stake() {
     setStakeAmount(Number(stakeAmount) + Number(stakeInputValue));
@@ -45,27 +51,31 @@ const HeroSection = ({
     <>
       <HeroSectionMainContainer>
         {isConnected ? (
-          <FormHeading>Your Dashboard</FormHeading>
+          <FormHeading>{dashboardTitle}</FormHeading>
         ) : (
           <FormHeading>Hi, Welcome</FormHeading>
         )}
 
         {isConnected ? (
           <>
-            <DashboardContainer>
-              <DashboardInnerContainer>
-                <DashboardLabel>Your staked amount: </DashboardLabel>
-                <DashboardValue>5000</DashboardValue>
-              </DashboardInnerContainer>
-              <DashboardInnerContainer>
-                <DashboardLabel>Days left: </DashboardLabel>
-                <DashboardValue>1</DashboardValue>
-              </DashboardInnerContainer>
-              <DashboardInnerContainer>
-                <DashboardLabel>Your reward</DashboardLabel>
-                <DashboardValue>500</DashboardValue>
-              </DashboardInnerContainer>
-            </DashboardContainer>
+            {staking ? (
+              <DashboardContainer>
+                <DashboardInnerContainer>
+                  <DashboardLabel>Your staked amount: </DashboardLabel>
+                  <DashboardValue>{stakeAmount}</DashboardValue>
+                </DashboardInnerContainer>
+                <DashboardInnerContainer>
+                  <DashboardLabel>Days left: </DashboardLabel>
+                  <DashboardValue>{daysLeft}</DashboardValue>
+                </DashboardInnerContainer>
+                <DashboardInnerContainer>
+                  <DashboardLabel>Your reward</DashboardLabel>
+                  <DashboardValue>500</DashboardValue>
+                </DashboardInnerContainer>
+              </DashboardContainer>
+            ) : (
+              <PlaceHolderDiv></PlaceHolderDiv>
+            )}
             <StakingForm>
               {staking ? (
                 <InputContainer>
@@ -126,7 +136,6 @@ const HeroSection = ({
                 </InputContainer>
               )}
             </StakingForm>
-            <WarningLabel>{warningLabelText}</WarningLabel>
           </>
         ) : (
           <WarningLabel>Please Connect your wallet to continue</WarningLabel>

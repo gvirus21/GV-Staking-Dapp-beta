@@ -50,6 +50,10 @@ export const DashboardValue = styled.h1`
   color: #faeee7;
   text-align: center;
 `;
+export const PlaceHolderDiv = styled.div`
+  height: 5rem;
+  width: 10rem;
+`;
 
 export const StakingForm = styled.form`
   margin: 1rem 0;
