@@ -9,18 +9,20 @@ import {
   AddressLabel,
 } from "./HeaderStyledElements";
 
-const Header = ({ isConnected, setIsConnected }) => {
-  const [accountAddress, setAccountAddress] = useState("0x86798");
-  const [userBalance, setUserBalance] = useState(null);
-
-  function truncate(accountAddress) {
-    if (accountAddress.length > 5) {
-      return accountAddress.substring(0, 5) + "...";
+const Header = ({
+  isConnected,
+  setIsConnected,
+  connectedAccount,
+  setConnectedAccount,
+}) => {
+  function truncate(connectedAccount) {
+    if (connectedAccount.length > 5) {
+      return connectedAccount.substring(0, 5) + "...";
     }
-    return accountAddress;
+    return connectedAccount;
   }
 
-  const trimmedAddress = truncate(accountAddress);
+  const trimmedAddress = truncate(connectedAccount);
 
   const connect = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -30,9 +32,7 @@ const Header = ({ isConnected, setIsConnected }) => {
         });
 
         if (accounts) {
-          accountChangeHandler(accounts[0]);
-          setAccountAddress(accountAddress[0]);
-          console.log(accountAddress[0]);
+          setConnectedAccount(accounts[0]);
           setIsConnected(true);
         }
       } catch (err) {
@@ -44,23 +44,28 @@ const Header = ({ isConnected, setIsConnected }) => {
   };
 
   const accountChangeHandler = (newAccount) => {
-    console.log(newAccount);
-    getUserBalance(newAccount);
-    setIsConnected(true);
-  };
 
-  const getUserBalance = async (address) => {
-    const balance = await window.ethereum.request({
-      method: "eth_getBalance",
-      params: [address],
-    });
-    setUserBalance(balance);
-    console.log("user balance: ", userBalance);
+    // won't set if their is no new account
+    if (newAccount[0]) {
+      setConnectedAccount(newAccount[0]);
+      setIsConnected(true);
+    }
   };
 
   useEffect(() => {
-    console.log(accountAddress);
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", accountChangeHandler);
+
+      // auto connect
+      window.ethereum
+        .request({ method: "eth_accounts" })
+        .then(accountChangeHandler)
+        .catch((err) => {
+          console.log("auto connect error: ", err);
+        });
+    }
   }, []);
+
   return (
     <>
       <HeaderMainContainer>

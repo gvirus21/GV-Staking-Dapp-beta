@@ -15,6 +15,7 @@ contract TokenFarm {
     address[] public stakers;
 
     mapping(address => uint256) public stakingBalance;
+    mapping(address => uint256) public rewardBalance;
     mapping(address => uint256) public stakingDays;
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
@@ -27,16 +28,6 @@ contract TokenFarm {
         owner = msg.sender;
     }
 
-    // function getStakeInfo() public {
-
-    //     // if (hasStaked[msg.sender]) {
-            
-    //     // } else {
-             
-    //     // }
-
-    // }
-
     function getStakeBalance() public returns (uint256) {
         require( isStaking[msg.sender], "User is not staking" );
         return stakingBalance[msg.sender];
@@ -46,6 +37,7 @@ contract TokenFarm {
 
     function stakeTokens(uint256 _amount, uint256 _days) public {
         require(_amount > 0, "Amount can't be Zero");
+        require(isStaking[msg.sender] == false, "User is Already staking");
 
         // transfer Tokens from staker to this contract's address for staking
         stakeToken.transferFrom(msg.sender, address(this), _amount);
@@ -59,18 +51,15 @@ contract TokenFarm {
 
         isStaking[msg.sender] = true;
         hasStaked[msg.sender] = true;
-
     }
 
     function unstakeTokens( uint256 _amount ) public {
-        require(stakingBalance[msg.sender] > 0, "Staking balance is can't be zero");
+        require(stakingBalance[msg.sender] > 0, "You haven't staked");
         require(_amount > 0, "Amount can't be zero");
         require(stakingBalance[msg.sender] >= _amount, "Can't unstake more than Staking balance");
 
         uint balance = stakingBalance[msg.sender];
-
         stakeToken.transfer(msg.sender, _amount);
-
         stakingBalance[msg.sender] -= _amount;
         
         if (stakingBalance[msg.sender] == 0) {
@@ -78,20 +67,29 @@ contract TokenFarm {
         }
     }
 
-    function issueReward() public {
+    function addReward() public {
+        // get the user's staked balance
+        uint256 balance = stakingBalance[msg.sender];
 
-        //get total number of days of stakeing currency
-        uint256 daysStaked = 0;
+        //calculate 1% of total stake amount
+        uint256 incrementAmount = balance/100; 
 
-        //calculate the reward
-        //( number of tokens staked / 20) * daysStaked
-        // ex: (5000 / 20) * 7 days = 1750 GVT
+        //add same amount of GVTokens to userReward mapping
+        rewardBalance[msg.sender] += incrementAmount;
+    }
 
+     function issueReward() public {
+        //check user has rewards or not
 
-        //send the result amount of GVT from admin to staker
+        //get the reward of user in a variable
 
-        
-
+        //transfer total reward to user account
+        gvToken.transfer(msg.sender, rewardBalance[msg.sender]);
 
     }
 }
+
+
+// agenda:
+// learn safemath from openzappelin to calculate a percentage
+// look into practical application of events

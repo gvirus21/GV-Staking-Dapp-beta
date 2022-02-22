@@ -8,15 +8,24 @@ const gvTokenAddress = "";
 const tokenFarmAddress = "";
 
 const App = () => {
-  const [connectedAccount, setConnectedAccount] = useState("");
+  const [staking, setStaking] = useState(false);
+  const [connectedAccount, setConnectedAccount] = useState("0xDefault");
   const [isConnected, setIsConnected] = useState(false);
   const [stakeAmount, setStakeAmount] = useState(0);
   const [stakingDuration, setStakingDuration] = useState(3);
   const [unstakeAmount, setUnstakeAmount] = useState(0);
 
-  useEffect(() => {
-    handleConnect();
+  useEffect(() => {   
     fetchStakedAmount();
+    let counter = 0;
+
+    const intervalID = setInterval(() => {
+      updateReward();
+      counter++;
+      if (counter === stakingDuration) {
+        clearInterval(intervalID);
+      }
+    }, 60000);
   }, []);
 
   useEffect(() => {
@@ -27,22 +36,24 @@ const App = () => {
     updateUnstake();
   }, [unstakeAmount]);
 
-  const handleConnect = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
+  // const handleAutoConnect = async () => { }
 
-        if (accounts) {
-          setIsConnected(true);
-          setConnectedAccount(accounts[0]);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
+  // const handleConnect = async () => {
+  //   if (window.ethereum) {
+  //     try {
+  //       const accounts = await window.ethereum.request({
+  //         method: "eth_requestAccounts",
+  //       });
+
+  //       if (accounts) {
+  //         setIsConnected(true);
+  //         setConnectedAccount(accounts[0]);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  // };
 
   // will fetch stake info for the current user
   const fetchStakedAmount = () => {
@@ -52,8 +63,7 @@ const App = () => {
     }
   };
 
-  // these functions will run when we change the stake and unstake amount
-  // they are going to call / update stake and unstake amount in smart contract
+  //
   const updateStake = () => {
     console.log("stakeAmount: ", stakeAmount);
     console.log("stakeDuration: ", stakingDuration);
@@ -63,10 +73,21 @@ const App = () => {
     console.log(unstakeAmount);
   };
 
+  const updateReward = () => {
+    console.log("updating reward");
+  };
+
   return (
     <div className="App">
-      <Header isConnected={isConnected} setIsConnected={setIsConnected} />
+      <Header
+        isConnected={isConnected}
+        setIsConnected={setIsConnected}
+        connectedAccount={connectedAccount}
+        setConnectedAccount={setConnectedAccount}
+      />
       <HeroSection
+        staking={staking}
+        setStaking={setStaking}
         isConnected={isConnected}
         stakeAmount={stakeAmount}
         setStakeAmount={setStakeAmount}

@@ -17,6 +17,8 @@ import {
   DurationLabel,
 } from "./HeroStyledElements";
 const HeroSection = ({
+  staking,
+  setStaking,
   isConnected,
   stakeAmount,
   setStakeAmount,
@@ -25,12 +27,14 @@ const HeroSection = ({
 }) => {
   const [warningLabelText, setWarningLabelText] = useState("");
   const [stakeInputValue, setStakeInputValue] = useState(0);
-  // const [stakingDuration, setStakingDuration] = useState(3);
   const [unstakeInputValue, setUnstakeInputValue] = useState(0);
 
+  useEffect(() => {
+    console.log("fff")
+  }, [staking]);
   function stake() {
-    // adding old stake value(if there is any) + new input stake value
     setStakeAmount(Number(stakeAmount) + Number(stakeInputValue));
+    setStaking(true);
   }
 
   function unstake() {
@@ -63,61 +67,64 @@ const HeroSection = ({
               </DashboardInnerContainer>
             </DashboardContainer>
             <StakingForm>
-              <InputContainer>
-                <FormInput
-                  id="stakeInput"
-                  placeholder="Enter Stake amount in GVT"
-                  type="number"
-                  min="0"
-                  value={stakeInputValue}
-                  onChange={(e) => {
-                    setStakeInputValue(e.target.value);
-                  }}
-                />
-                <DurationContainer>
-                   <DurationSelector
-                  onChange={(e) => {
-                    setStakingDuration(e.target.value);
-                  }}
-                >
-                  <DurationOption>3</DurationOption>
-                  <DurationOption>7</DurationOption>
-                  <DurationOption>14</DurationOption>
-                  </DurationSelector>
-                  <DurationLabel>Days</DurationLabel>
-                </DurationContainer>
-               
-                <FormButton
-                  onClick={(e) => {
-                    e.preventDefault();
-                    stake(e);
-                    setStakeInputValue(0);
-                  }}
-                >
-                  Stake
-                </FormButton>
-              </InputContainer>
-              <InputContainer>
-                <FormInput
-                  id="unstakeInput"
-                  placeholder="Enter Unstake amount in GVT"
-                  type="number"
-                  min="10"
-                  value={unstakeInputValue}
-                  onChange={(e) => {
-                    setUnstakeInputValue(e.target.value);
-                  }}
-                />
-                <FormButton
-                  onClick={(e) => {
-                    e.preventDefault();
-                    unstake();
-                    setUnstakeInputValue(0);
-                  }}
-                >
-                  Unstake
-                </FormButton>
-              </InputContainer>
+              {staking ? (
+                <InputContainer>
+                  <FormInput
+                    id="unstakeInput"
+                    placeholder="Enter Unstake amount in GVT"
+                    type="number"
+                    min="10"
+                    value={unstakeInputValue}
+                    onChange={(e) => {
+                      setUnstakeInputValue(e.target.value);
+                    }}
+                  />
+                  <FormButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      unstake();
+                      setUnstakeInputValue(0);
+                    }}
+                  >
+                    Unstake
+                  </FormButton>
+                </InputContainer>
+              ) : (
+                <InputContainer>
+                  <FormInput
+                    id="stakeInput"
+                    placeholder="Enter Stake amount in GVT"
+                    type="number"
+                    min="0"
+                    value={stakeInputValue}
+                    onChange={(e) => {
+                      setStakeInputValue(e.target.value);
+                    }}
+                  />
+                  <DurationContainer>
+                    <DurationSelector
+                      onChange={(e) => {
+                        setStakingDuration(e.target.value);
+                      }}
+                    >
+                      <DurationOption>3</DurationOption>
+                      <DurationOption>7</DurationOption>
+                      <DurationOption>14</DurationOption>
+                    </DurationSelector>
+                    <DurationLabel>Days</DurationLabel>
+                  </DurationContainer>
+
+                  <FormButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      stake(e);
+                      setStakeInputValue(0);
+                    }}
+                  >
+                    Stake
+                  </FormButton>
+                </InputContainer>
+              )}
             </StakingForm>
             <WarningLabel>{warningLabelText}</WarningLabel>
           </>
