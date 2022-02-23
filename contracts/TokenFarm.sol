@@ -9,18 +9,27 @@ import "hardhat/console.sol";
 contract TokenFarm {
     string public name = "Token farm";
     address public owner;
+    uint256 public totalSupply;
+    
     GVToken public gvToken;
     StakeToken public stakeToken;
 
-    address[] public stakers;
+    uint256 public rewardRate = 100;
+    uint256 public lastUpdateTime;
+    uint256 public rewardPerTokenStored;
 
-    mapping(address => uint256) public stakingBalance;
-    mapping(address => uint256) public rewardBalance;
-    mapping(address => uint256) public stakingDays;
+    struct StakeInfo {
+        address staker;
+        uint256 startAt;
+        uint256 endAt;
+        uint256 stakeAmount;
+    }
+
+    mapping(address => StakeInfo) public stakeInfos;
+    mapping(address => uint256) public rewards;
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
-
-    event stakeData( uint indexed _stakedAmount, address indexed _account);
+    mapping(address => uint) public userRewardPerTokenPaid;
 
     constructor(GVToken _gvToken, StakeToken _stakeToken) {
         gvToken = _gvToken;
@@ -28,68 +37,73 @@ contract TokenFarm {
         owner = msg.sender;
     }
 
-    function getStakeBalance() public returns (uint256) {
-        require( isStaking[msg.sender], "User is not staking" );
-        return stakingBalance[msg.sender];
+    function rewardPerToken() public view returns (uint) {
+        if (totalSupply == 0) {
+            return 0;
+        }
+        return
+            rewardPerTokenStored +
+            (((block.timestamp - lastUpdateTime) * rewardRate * 1e18) / totalSupply);
     }
 
 
+      function earned(address _account) public view returns (uint) {
+        return
+            ((stakeInfos[_account].stakeAmount *
+                (rewardPerToken() - userRewardPerTokenPaid[_account])) / 1e18) +
+            rewards[_account];
+    }
 
-    function stakeTokens(uint256 _amount, uint256 _days) public {
-        require(_amount > 0, "Amount can't be Zero");
-        require(isStaking[msg.sender] == false, "User is Already staking");
 
-        // transfer Tokens from staker to this contract's address for staking
+    modifier updateReward(address _account, uint256 _duration) {
+        // handles reward for each stake
+        rewardPerTokenStored = rewardPerToken();
+        lastUpdateTime = block.timestamp;
+
+        rewards[_account] = earned(_account);
+        userRewardPerTokenPaid[_account] = rewardPerTokenStored;
+        _;
+    }
+
+    function stake(uint256 _amount, uint256 _duration)
+        external
+        updateReward(msg.sender, _duration)
+    {
+        require(_amount > 0, "Amount Can't be Zero");
+
+        totalSupply += _amount;
+        StakeInfo memory stakeInfo = StakeInfo(
+            msg.sender,
+            block.timestamp,
+            _duration,
+            _amount
+        );
+
+        stakeInfos[msg.sender] = stakeInfo;
         stakeToken.transferFrom(msg.sender, address(this), _amount);
 
-        stakingBalance[msg.sender] += _amount;
-        stakingDays[msg.sender] = _days;
-
-        if (!hasStaked[msg.sender]) {
-            stakers.push(msg.sender);
-        } 
-
-        isStaking[msg.sender] = true;
-        hasStaked[msg.sender] = true;
     }
 
-    function unstakeTokens( uint256 _amount ) public {
-        require(stakingBalance[msg.sender] > 0, "You haven't staked");
-        require(_amount > 0, "Amount can't be zero");
-        require(stakingBalance[msg.sender] >= _amount, "Can't unstake more than Staking balance");
+    modifier checkCanUnstake(address _account) {
+        uint256 timePassed = block.timestamp - stakeInfos[msg.sender].startAt;
+        require(
+            timePassed >= stakeInfos[msg.sender].endAt,
+            "Stake duration is higher"
+        );
+        _;
+    }
 
-        uint balance = stakingBalance[msg.sender];
+    function unstake(uint256 _amount) external checkCanUnstake(msg.sender) {
+        totalSupply -= _amount;
+        stakeInfos[msg.sender].stakeAmount += _amount;
         stakeToken.transfer(msg.sender, _amount);
-        stakingBalance[msg.sender] -= _amount;
-        
-        if (stakingBalance[msg.sender] == 0) {
-            isStaking[msg.sender] = false;
-        }
     }
 
-    function addReward() public {
-        // get the user's staked balance
-        uint256 balance = stakingBalance[msg.sender];
-
-        //calculate 1% of total stake amount
-        uint256 incrementAmount = balance/100; 
-
-        //add same amount of GVTokens to userReward mapping
-        rewardBalance[msg.sender] += incrementAmount;
+    function getReward() external { // also needs to update reward
+        uint256 reward = rewards[msg.sender];
+        rewards[msg.sender] = 0;
+        gvToken.transfer(msg.sender, reward);
     }
 
-     function issueReward() public {
-        //check user has rewards or not
 
-        //get the reward of user in a variable
-
-        //transfer total reward to user account
-        gvToken.transfer(msg.sender, rewardBalance[msg.sender]);
-
-    }
 }
-
-
-// agenda:
-// learn safemath from openzappelin to calculate a percentage
-// look into practical application of events
